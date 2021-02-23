@@ -1,0 +1,23 @@
+language: generic
+
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t navi0208/react-test-app -f ./frontend/Dockerfile.dev ./frontend
+
+script:
+  - docker run -e CI=true navi0208/react-test-app npm run test
+
+after_sucess:
+  - docker build -t navi0208/docker-frontend ./frontend
+  - docker build -t navi0208/docker-backend ./backend
+  - docker build -t navi0208/docker-nginx ./nginx
+
+  - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+
+  - docker push navi0208/docker-frontend
+  - docker push navi0208/docker-backend
+  - docker push navi0208/docker-nginx
