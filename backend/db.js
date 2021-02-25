@@ -1,5 +1,6 @@
 var mysql = require("mysql");
-
+console.log("process.env.MYSQL_HOST");
+console.log(process.env.MYSQL_HOST);
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: process.env.MYSQL_HOST,
